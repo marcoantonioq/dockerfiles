@@ -1,0 +1,13 @@
+version: '3.3'
+
+services:
+  samba:
+    tty: true
+    container_name: smbd
+    volumes:
+      - /home/smb/:/shared
+    ports:
+      - "445:445"
+    build:
+      context: .
+      dockerfile: Dockerfile
