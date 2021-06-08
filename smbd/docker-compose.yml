@@ -5,7 +5,7 @@ services:
     tty: true
     container_name: smbd
     volumes:
-      - /home/smb/:/shared
+      - /home/Arquivos/smb/:/shared
     ports:
       - "445:445"
     build:

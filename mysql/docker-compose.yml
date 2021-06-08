@@ -1,0 +1,18 @@
+version: "3"
+services:
+  db:
+    container_name: db-mysql
+    image: mysql:5.6
+    networks:
+      - db
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_DATABASE=api
+      - MYSQL_ROOT_PASSWORD=123456
+    volumes:
+      - ./docker/volume_mysql:/var/lib/mysql
+networks:
+  db:
+    driver: bridge

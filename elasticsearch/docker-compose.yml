@@ -1,0 +1,17 @@
+version: '3.3'
+
+services:
+  es01:
+    tty: true
+    container_name: es01
+    args: 
+      node.name: es01
+      cluster.name: es-docker-cluster
+      http.host: 0.0.0.0
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+      
+      volumes:
+        - ./es01:/usr/share/elasticsearch/data
+        ports: 
+          - 9200:9300
+          

@@ -3,6 +3,6 @@ version: '3.3'
 services:
   db:
     image: mongo
+    container_name: mongod
     ports:
       - "27017:27017"
-    container_name: mongod

@@ -1,0 +1,30 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    container_name: "postgres"
+    environment:
+      - POSTGRES_DB=mydb
+      - POSTGRES_USER=marco
+      - POSTGRES_PASSWORD=p@ss123
+      - TZ=GMT
+    volumes:
+      - "./data/:/var/lib/postgresql/data"
+    ports:
+      - 5432:5432
+    networks:
+      - postgres
+  pgadmin4:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=marco.aq7@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=p@ss123
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - postgres
+networks:
+  postgres:
+    driver: bridge

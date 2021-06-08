@@ -1,0 +1,66 @@
+version: '3'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.0
+    container_name: elasticsearch
+    # volumes:
+    #   - /home/data/elasticsearch/:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      http.host: 0.0.0.0
+      transport.host: localhost
+      network.host: 0.0.0.0
+      discovery.type: single-node
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+    networks:
+      - graylog
+
+  mongo:
+    image: mongo:4.2
+    container_name: mongo
+    volumes: 
+      - /home/data/mongo/:/data/db
+    networks:
+      - graylog
+
+  graylog:
+    image: graylog/graylog:4.0
+    container_name: graylog
+    # volumes:
+    #   - /home/data/graylog/journal:/usr/share/graylog/data/journal
+    #   - /home/data/graylog/config:/usr/share/graylog/data/config
+    ports:
+      # Graylog web interface and REST API
+      - 9000:9000
+      - 7555:7555
+      # Logs
+      - 12201:12201
+      - 1514:1514
+      - 1514:1514/udp
+      - 5555:5555
+    environment:
+      GRAYLOG_HTTP_EXTERNAL_URI: http://127.0.0.1:9000/
+      GRAYLOG_WEB_ENDPOINT_URI: http://127.0.0.1:9000/api
+      GRAYLOG_ROOT_TIMEZONE: Brazil/East
+      DISABLE_TELEMETRY: 1
+    networks:
+      - graylog
+    restart: on-failure
+    depends_on:
+      - elasticsearch
+      - mongo
+
+networks:
+  graylog:
+    driver: bridge
