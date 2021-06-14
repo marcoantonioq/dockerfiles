@@ -1,0 +1,27 @@
+# construir imagem
+# https://github.com/oracle/docker-images/tree/main/OracleDatabase/SingleInstance/dockerfiles
+# ./buildContainerImage.sh -v 18.4.0 -x
+version: "3"
+services:
+  oracle:
+    container_name: oracle
+    image: oracleinanutshell/oracle-xe-11g:latest
+    # image: oracle/database:18.4.0-xe
+    environment:
+      - ORACLE_ALLOW_REMOTE=true
+      - ORACLE_DISABLE_ASYNCH_IO=true
+      - ORACLE_ENABLE_XDB=true
+      # - ORACLE_PWD=p@ss123
+    ports:
+      - 1521:1521
+      - 5500:5500
+      - 8088:8080
+    volumes:
+      - ./oradata:/opt/oracle/oradata
+      - ./scripts/setup:/opt/oracle/scripts/setup
+      - ./scripts/startup:/opt/oracle/scripts/startup
+    networks:
+      - oracle
+networks:
+  oracle:
+    driver: bridge
